@@ -20,7 +20,7 @@ import "./interfaces/ISwapMining.sol";
 //import 'hardhat/console.sol';
 
 
-contract StrategyAddTwoSidesOptimal is Ownable, ReentrancyGuard, Strategy {
+contract StrategyOpenPosition is Ownable, ReentrancyGuard, Strategy {
     using SafeToken for address;
     using SafeMath for uint256;
 

@@ -11,7 +11,7 @@ import 'openzeppelin-solidity-2.3.0/contracts/token/ERC20/IERC20.sol';
 import './SafeToken.sol';
 
 // Internal references
-import "./PTokenFactory.sol";
+import "./GTokenFactory.sol";
 import './Strategy.sol';
 import "./interfaces/IMdexFactory.sol";
 import "./interfaces/IMdexRouter.sol";

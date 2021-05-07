@@ -8,7 +8,7 @@ import "@uniswap/v2-core/contracts/libraries/Math.sol";
 import './SafeToken.sol';
 
 
-contract PToken is ERC20, Ownable {
+contract GToken is ERC20, Ownable {
     using SafeToken for address;
     using SafeMath for uint256;
 

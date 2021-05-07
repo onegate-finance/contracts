@@ -25,7 +25,7 @@ contract StrategyReinvest is Ownable, ReentrancyGuard, Strategy {
     using SafeMath for uint256;
 
     /* ========== EVENTS ========== */
-    event BountyAddressChanded(address bountyAddress, address newBountyAddress);
+    event BountyAddressChanged(address bountyAddress, address newBountyAddress);
 
     IMdexFactory public factory;
     IMdexRouter public router;
@@ -160,7 +160,7 @@ contract StrategyReinvest is Ownable, ReentrancyGuard, Strategy {
 
     function setBountyAdd(address _bountyAddress) external onlyOwner {
         require(_bountyAddress != address(0), "new bounty address is the zero address");
-        emit BountyAddressChanded(bountyAdd, _bountyAddress);
+        emit BountyAddressChanged(bountyAdd, _bountyAddress);
         bountyAdd = _bountyAddress;
     }
 

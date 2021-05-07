@@ -18,7 +18,7 @@ import "./interfaces/IMdexPair.sol";
 import "./interfaces/ISwapMining.sol";
 
 
-contract StrategyWithdrawMinimizeTrading is Ownable, ReentrancyGuard, Strategy {
+contract StrategyClosePosition is Ownable, ReentrancyGuard, Strategy {
     using SafeToken for address;
     using SafeMath for uint;
 

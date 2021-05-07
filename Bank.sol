@@ -11,9 +11,9 @@ import './SafeToken.sol';
 
 // Internal references
 import './interfaces/IBankConfig.sol';
-import './interfaces/IPTokenFactory.sol';
+import './interfaces/IGTokenFactory.sol';
 import './Goblin.sol';
-import "./PToken.sol";
+import "./GToken.sol";
 
 //import 'hardhat/console.sol';
 
@@ -32,7 +32,7 @@ contract Bank is Ownable, ReentrancyGuard {
     /* ========== STRUCTURE ========== */
     struct IronBank {
         address tokenAddr;
-        address pTokenAddr;
+        address gTokenAddr;
         bool isOpen;
         bool canDeposit;
         bool canWithdraw;
@@ -62,7 +62,7 @@ contract Bank is Ownable, ReentrancyGuard {
     }
 
     IBankConfig public config;
-    IPTokenFactory public factory;
+    IGTokenFactory public factory;
 
     mapping(address => IronBank) public banks;
 
@@ -91,7 +91,7 @@ contract Bank is Ownable, ReentrancyGuard {
 
     constructor(
         address _operatorAddress,
-        IPTokenFactory _factory
+        IGTokenFactory _factory
     ) public {
         operatorAddress = _operatorAddress;
         factory = _factory;
@@ -196,11 +196,11 @@ contract Bank is Ownable, ReentrancyGuard {
 
         bank.totalVal = bank.totalVal.add(amount);
         uint256 total = totalToken(token).sub(amount);
-        uint256 pTotal = PToken(bank.pTokenAddr).totalSupply();
-        // calculate amount of ptoken
+        uint256 pTotal = GToken(bank.gTokenAddr).totalSupply();
+        // calculate amount of gtoken
         uint256 pAmount = (total == 0 || pTotal == 0) ? amount: amount.mul(pTotal).div(total);
-        // mint ptoken
-        PToken(bank.pTokenAddr).mint(msg.sender, pAmount);
+        // mint gtoken
+        GToken(bank.gTokenAddr).mint(msg.sender, pAmount);
     }
 
     // Withdraw Money From IRON BANK with interest
@@ -210,10 +210,10 @@ contract Bank is Ownable, ReentrancyGuard {
 
         calInterest(token);
 
-        uint256 amount = pAmount.mul(totalToken(token)).div(PToken(bank.pTokenAddr).totalSupply());
+        uint256 amount = pAmount.mul(totalToken(token)).div(GToken(bank.gTokenAddr).totalSupply());
 
         bank.totalVal = bank.totalVal.sub(amount);
-        PToken(bank.pTokenAddr).burn(msg.sender, pAmount);
+        GToken(bank.gTokenAddr).burn(msg.sender, pAmount);
 
         if (token == address(0)) {
             SafeToken.safeTransferETH(msg.sender, amount);
@@ -367,9 +367,9 @@ contract Bank is Ownable, ReentrancyGuard {
         IronBank storage bank = banks[token];
         require(!bank.isOpen, 'token already exists');
         bank.isOpen = true;
-        address pToken = factory.genPToken(_symbol);
+        address gToken = factory.genGToken(_symbol);
         bank.tokenAddr = token;
-        bank.pTokenAddr = pToken;
+        bank.gTokenAddr = gToken;
         bank.canDeposit = true;
         bank.canWithdraw = true;
         bank.totalVal = 0;
